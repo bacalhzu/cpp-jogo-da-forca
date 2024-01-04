@@ -1,3 +1,4 @@
+#include <iostream>
 #include <random>
 #include "words.h"
 
@@ -78,5 +79,53 @@ namespace Word {
 
 		//return a word value
 		return *word;
+	}
+
+	void displayWord(Word* obj) {
+
+		//mostra o tema da palavra
+		std::cout << "Tema: " << obj->theme;
+		std::cout << std::endl << std::endl;
+
+		//percorre cada letra
+		for (int i = 0; i < strlen(obj->word); i++) 
+			//se esta letra já foi advinhada
+			if (*(obj->matchings + i))
+				//escreve a letra
+				std::cout << " " << *(obj->word + i) << " ";
+			else 
+				//escreve um traço
+				std::cout << " _ ";
+	}
+
+	bool checkWord(Word* obj, char search) {
+		bool matched{ false };
+
+		//percorre cada letra da string
+		for (int i = 0; i < strlen(obj->word); i++)
+			//se o caractere da string limpa bater com o caractere buscado
+			if (*(obj->cleanWord + i) == search) {
+				//atualiza a lista de match
+				*(obj->matchings + i) = search;
+				//retorna que teve match
+				matched = true;
+			}
+
+		return matched;
+	}
+
+	bool checkWin(Word* obj) {
+		bool matched{ true };
+
+		//percorre cada letra da string
+		for (int i = 0; i < strlen(obj->word); i++) {
+			//salva se o indice teve match
+			matched = *(obj->matchings + i);
+			//se encontrou um caratere sem match sai do loop ja
+			if (!matched)
+				break;
+		}
+			
+		return matched;
 	}
 }
